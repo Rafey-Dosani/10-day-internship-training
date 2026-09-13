@@ -1,0 +1,68 @@
+# Functions
+
+
+def greet():
+    print("Hello, Python!")
+
+
+greet()
+
+
+# Function with parameters
+
+def add(a, b):
+    return a + b
+
+
+result = add(10, 20)
+
+print("Sum:", result)
+
+
+# Default parameter
+
+def introduce(name, age=20):
+    print(f"Name: {name}, Age: {age}")
+
+
+introduce("Rafey")
+introduce("Ali", 22)
+
+
+# Keyword arguments
+
+def employee_info(name, department, salary):
+    print(name)
+    print(department)
+    print(salary)
+
+
+employee_info(
+    name="Rafey",
+    department="CSE",
+    salary=50000
+)
+
+
+# Variable length arguments
+
+def calculate_sum(*numbers):
+    return sum(numbers)
+
+
+print("Sum:", calculate_sum(10, 20, 30, 40))
+
+
+# Keyword variable arguments
+
+def display_details(**details):
+
+    for key, value in details.items():
+        print(f"{key}: {value}")
+
+
+display_details(
+    name="Rafey",
+    age=21,
+    branch="CSE"
+)
