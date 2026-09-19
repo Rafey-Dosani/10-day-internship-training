@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Employee Dashboard</h1>
+            <p>Manage employees using JavaScript and REST API</p>
+        </header>
+
+        <section class="controls">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search employee..."
+            >
+
+            <select id="departmentFilter">
+                <option value="all">All Departments</option>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+
+            <select id="sortSelect">
+                <option value="default">Sort By</option>
+                <option value="name">Name</option>
+                <option value="id">ID</option>
+            </select>
+
+            <button id="addEmployeeBtn">Add Employee</button>
+
+        </section>
+
+        <section id="employeeList" class="employee-list">
+            <p>Loading employees...</p>
+        </section>
+
+    </div>
+
+    <!-- Employee Modal -->
+    <div id="employeeModal" class="modal hidden">
+
+        <div class="modal-content">
+
+            <button id="closeModal" class="close-btn">&times;</button>
+
+            <h2 id="modalTitle">Add Employee</h2>
+
+            <form id="employeeForm">
+
+                <input
+                    type="text"
+                    id="employeeName"
+                    placeholder="Employee Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="employeeUsername"
+                    placeholder="Username"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="employeeEmail"
+                    placeholder="Email"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="employeeDepartment"
+                    placeholder="Department"
+                    required
+                >
+
+                <button type="submit">Save Employee</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
