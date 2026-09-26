@@ -543,7 +543,7 @@ function UserDashboard({ user }) {
    FACILITIES (USER)
 ========================= */
 
-function Facilities({ user }) {
+function Facilities() {
   const [facilities, setFacilities] = useState([]);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
@@ -582,7 +582,6 @@ function Facilities({ user }) {
     return (
       <FacilityDetails
         facility={selected}
-        user={user}
         onBack={() => setSelected(null)}
       />
     );
@@ -634,7 +633,7 @@ function Facilities({ user }) {
    FACILITY DETAILS
 ========================= */
 
-function FacilityDetails({ facility, user, onBack }) {
+function FacilityDetails({ facility, onBack }) {
   const [date, setDate] = useState("");
   const [availability, setAvailability] = useState([]);
   const [availLoading, setAvailLoading] = useState(false);
@@ -660,7 +659,7 @@ function FacilityDetails({ facility, user, onBack }) {
           `/facilities/${facility.id}/availability?date=${date}`
         );
         if (active) setAvailability(response.data.bookings);
-      } catch (err) {
+      } catch {
         if (active) setAvailability([]);
       } finally {
         if (active) setAvailLoading(false);
@@ -1999,7 +1998,7 @@ function App() {
     else if (page === "reports") content = <Reports />;
   } else {
     if (page === "dashboard") content = <UserDashboard user={user} />;
-    else if (page === "facilities") content = <Facilities user={user} />;
+    else if (page === "facilities") content = <Facilities />;
     else if (page === "bookings") content = <MyBookings user={user} />;
   }
 
