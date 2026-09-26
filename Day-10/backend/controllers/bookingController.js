@@ -4,7 +4,6 @@ const db = require("../config/db");
 const createBooking = async (req, res) => {
   try {
     const {
-      user_id,
       facility_id,
       booking_date,
       start_time,
@@ -12,8 +11,10 @@ const createBooking = async (req, res) => {
       purpose,
     } = req.body;
 
+    // Security: always use the JWT identity, never trust user_id from body
+    const userId = req.user.id;
+
     if (
-      !user_id ||
       !facility_id ||
       !booking_date ||
       !start_time ||
@@ -72,7 +73,7 @@ const createBooking = async (req, res) => {
        (user_id, facility_id, booking_date, start_time, end_time, purpose)
        VALUES (?, ?, ?, ?, ?, ?)`,
       [
-        user_id,
+        userId,
         facility_id,
         booking_date,
         start_time,
@@ -94,7 +95,7 @@ const createBooking = async (req, res) => {
   }
 };
 
-// Get all bookings
+// Get all bookings (admin only)
 const getBookings = async (req, res) => {
   try {
     const [bookings] = await db.query(`
@@ -134,6 +135,13 @@ const getUserBookings = async (req, res) => {
   try {
     const { userId } = req.params;
 
+    // Security: non-admin users can only access their own bookings
+    if (req.user.role !== "ADMIN" && req.user.id !== parseInt(userId)) {
+      return res.status(403).json({
+        message: "Access denied",
+      });
+    }
+
     const [bookings] = await db.query(
       `SELECT
         b.id,
@@ -163,7 +171,7 @@ const getUserBookings = async (req, res) => {
   }
 };
 
-// Approve booking
+// Approve booking (admin only)
 const approveBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -193,7 +201,7 @@ const approveBooking = async (req, res) => {
   }
 };
 
-// Reject booking
+// Reject booking (admin only)
 const rejectBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -227,6 +235,26 @@ const rejectBooking = async (req, res) => {
 const cancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // For non-admin users, verify they own the booking
+    if (req.user.role !== "ADMIN") {
+      const [bookings] = await db.query(
+        "SELECT user_id FROM bookings WHERE id = ?",
+        [id]
+      );
+
+      if (bookings.length === 0) {
+        return res.status(404).json({
+          message: "Booking not found",
+        });
+      }
+
+      if (bookings[0].user_id !== req.user.id) {
+        return res.status(403).json({
+          message: "Access denied",
+        });
+      }
+    }
 
     const [result] = await db.query(
       `UPDATE bookings

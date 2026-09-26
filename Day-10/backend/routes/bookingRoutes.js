@@ -32,14 +32,14 @@ router.get(
   getBookings
 );
 
-// Student/faculty can see their bookings
+// Users can see their own bookings (auth check enforced in controller)
 router.get(
   "/user/:userId",
   authenticate,
   getUserBookings
 );
 
-// Admin actions
+// Admin actions: approve / reject
 router.put(
   "/:id/approve",
   authenticate,
@@ -54,11 +54,10 @@ router.put(
   rejectBooking
 );
 
-// Logged-in users can cancel
+// Logged-in users (any role) can cancel
 router.put(
   "/:id/cancel",
   authenticate,
-  authorize("STUDENT", "FACULTY"),
   cancelBooking
 );
 

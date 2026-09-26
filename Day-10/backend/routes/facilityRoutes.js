@@ -6,6 +6,7 @@ const {
   createFacility,
   updateFacility,
   deleteFacility,
+  getFacilityAvailability,
 } = require("../controllers/facilityController");
 
 const {
@@ -15,11 +16,16 @@ const {
 
 const router = express.Router();
 
-// Anyone logged in can view facilities
 router.get("/", authenticate, getFacilities);
+
+router.get(
+  "/:id/availability",
+  authenticate,
+  getFacilityAvailability
+);
+
 router.get("/:id", authenticate, getFacilityById);
 
-// Only admin can manage facilities
 router.post(
   "/",
   authenticate,
